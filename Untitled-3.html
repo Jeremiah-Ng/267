@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{text-align: center;
+        margin-top: 50px;
+        font-size: 25px;}
+#myDIV {
+  width: 100%;
+  padding: 50px 0;
+  text-align: center;
+  margin-top: 20px;
+  display:none;
+}
+
+</style>
+</head>
+<body>
+
+<p>Select an image to rotate</p>
+<input type="file" id="video1" name="video1" accept="image/*"><br><br><br>
+<button onclick="myFunction()">Submit</button><br><br>
+<img class="video2"></img>
+<div id="myDIV" display="none">
+</div>
+
+
+<script>
+document.querySelector('input[type="file"]').addEventListener('change',function(){
+    if (this.files && this.files[0]){
+        var img=document.querySelector('img');
+        img.onload = () =>{
+            URL.revokeObjectURL(img.src);
+        }
+        img.src=URL.createObjectURL(this.files[0]);
+    }
+})
+function myFunction(){
+    const inputImage = document.querySelector('.video2');
+    if (inputImage.complete){
+        flipImage();
+    }
+    else{
+        inputImage.onload=flipImage;
+    }
+    function flipImage(){
+        const outputImage=document.createElement('canvas')
+
+        outputImage.width=inputImage.naturalWidth;
+        outputImage.height=inputImage.naturalHeight;
+
+        const ctx=outputImage.getContext('2d');
+
+        ctx.scale(-1,1)
+
+        ctx.drawImage(inputImage,-outputImage.width,0)
+
+        inputImage.parentNode.insertBefore(
+            outputImage,
+            inputImage.nextElementSibling
+        );
+        inputImage.style.display="none";
+    }
+}
+</script>
+
+</body>
+</html>
+
